@@ -2,7 +2,9 @@ const express = require('express')
 const mongoose = require('mongoose')
 const usersTable = require('./MongoDB/Model/Users');
 const userRegiste = require('./Service/userRegiste');
+const createComments = require('./Service/createComment');
 const cors = require('cors');
+const createPost = require('./Service/createPost');
 const app = express();
 const port = 3000;
 const database = 'mongodb://localhost:27017/pinia-database';
@@ -45,7 +47,38 @@ app.post('/', async (req, res) => {
         res.status(500).json({ error: 'server error' })
     }
 })
+
+/**
+ * @description 代理创建Comment的请求
+ */
+app.post('/create/Comment', async (req, res) => {
+    try {
+        console.log('Get create comment: ', req.body);
+        createComments(req.body);
+        res.sendStatus(200);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+})
+
+
+/**
+ * @description 代理创建Post请求
+ */
+app.post('/create/Post', async (req, res) => {
+    try {
+        console.log(req.body);
+        createPost(req.body);
+        res.sendStatus(200);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500)
+    }
+})
+
+
 //启动服务器
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-})
+});

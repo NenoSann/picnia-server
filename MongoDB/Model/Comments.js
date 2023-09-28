@@ -1,6 +1,7 @@
 // 导入mongoose模块
 const mongoose = require('mongoose')
 const User = require('./Users');
+
 // Define Comment schema
 const commentSchema = mongoose.Schema({
     sender: {
@@ -24,6 +25,6 @@ const commentSchema = mongoose.Schema({
 })
 
 // Create Comment model
-const Comment = mongoose.model(commentSchema);
+const Comment = mongoose.model('Comment', commentSchema);
 
-module.exports = Comment, commentSchema;
+module.exports = { Comment, commentSchema }

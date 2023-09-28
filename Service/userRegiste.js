@@ -1,4 +1,4 @@
-const usersTable = require('../MongoDB/usersTable');
+const usersTable = require('../MongoDB/Model/Users');
 
 /**
  * @description: 接受一个json参数，将json中的参数解析后存入mongodb的用户表中

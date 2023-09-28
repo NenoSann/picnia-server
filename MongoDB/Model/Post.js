@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const User = require('./Users')
-const Comment = require('./Comments');
+const { commentSchema } = require('./Comments');
+
 /**
  * @description Picnia的Post model，用于表示用户发送的Po文
  *         { author: ref:'user'
@@ -19,16 +20,20 @@ const postSchema = mongoose.Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: User,
-        required: true
+        // required: true
     },
     location: {
         type: mongoose.Schema.Types.String,
     },
-    data: {
+    date: {
         type: mongoose.Schema.Types.Date,
     },
-    comments: [Comment],
+    content: {
+        type: mongoose.Schema.Types.String,
+        required: true,
+    },
+    comments: [commentSchema],
 });
 
-const Post = mongoose.model(postSchema);
-module.exports = postSchema, Post;
+const Post = mongoose.model('Post', postSchema);
+module.exports = { postSchema, Post };
