@@ -1,6 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const usersTable = require('./MongoDB/usersTable');
+const usersTable = require('./MongoDB/Model/Users');
 const userRegiste = require('./Service/userRegiste');
 const cors = require('cors');
 const app = express();
