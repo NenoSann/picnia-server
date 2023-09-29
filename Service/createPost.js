@@ -16,7 +16,7 @@ function createPost(postContent) {
     })
         .save()
         .then((savedPost) => {
-            console.log('Post saved successfully: ', savedComment)
+            console.log('Post saved successfully: ', savedPost)
         })
         .catch((error) => {
             console.error(error);

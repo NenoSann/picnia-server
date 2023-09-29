@@ -15,11 +15,9 @@ const { commentSchema } = require('./Comments');
 const postSchema = mongoose.Schema({
     image: {
         type: mongoose.Schema.Types.Buffer,
-        required: true
     },
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: User,
+        type: mongoose.Schema.Types.String,
         // required: true
     },
     location: {

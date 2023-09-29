@@ -1,17 +1,16 @@
 // 导入mongoose模块
 const mongoose = require('mongoose')
-const User = require('./Users');
 
 // Define Comment schema
 const commentSchema = mongoose.Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User,
+        ref: 'User',
         required: true,
     },
     reception: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User,
+        ref: 'User',
         required: true,
     },
     date: {

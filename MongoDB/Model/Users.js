@@ -1,17 +1,13 @@
 const mongoose = require('mongoose')
+const { postSchema } = require('./Post')
 
 const User = mongoose.model('User', {
     userID: mongoose.Types.ObjectId,
     userName: String,
     avatar: String,
     posts: [
-        {
-            post_id: mongoose.Types.ObjectId,
-            title: String,
-            content: String,
-            timeStamp: Date
-        }
+        postSchema
     ]
 });
 
-module.exports = User;
+module.exports = { User };

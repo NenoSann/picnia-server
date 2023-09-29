@@ -1,19 +1,34 @@
 const express = require('express')
 const mongoose = require('mongoose')
+
 const usersTable = require('./MongoDB/Model/Users');
 const userRegiste = require('./Service/userRegiste');
 const createComments = require('./Service/createComment');
-const cors = require('cors');
 const createPost = require('./Service/createPost');
+const createImage = require('./Service/createImage');
+// 创建中间件
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const multer = require('multer');
 const app = express();
 const port = 3000;
 const database = 'mongodb://localhost:27017/pinia-database';
 
+//中间件实例
+const storage = multer.memoryStorage({
+})
+const upload = multer({ storage: storage });
 
-//启动全局cors
+
+// multer的实例对象
+//启动全局cors，JSON解析和multer多文件解析
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
+
+
+//连接mongoose
 mongoose.connect(database, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -69,7 +84,9 @@ app.post('/create/Comment', async (req, res) => {
 app.post('/create/Post', async (req, res) => {
     try {
         console.log(req.body);
-        createPost(req.body);
+        res.json({
+            state: 'ok'
+        })
         res.sendStatus(200);
     } catch (error) {
         console.error(error);
@@ -77,6 +94,29 @@ app.post('/create/Post', async (req, res) => {
     }
 })
 
+/**
+ * @description 代理创建图片请求，
+ */
+app.post('/create/Image', upload.single('image'), async (req, res) => {
+    console.log('create image')
+    if (!req.file) {
+        res.status(400).send('No file uploaded');
+        return;
+    }
+    const imageFile = {
+        name: req.file.originalname,
+        buffer: req.file.buffer,
+    }
+    try {
+        createImage(imageFile);
+    } catch (error) {
+        res.status(500);
+        res.send();
+        console.error('Fail to store image');
+    }
+    res.status(200);
+    res.send();
+})
 
 //启动服务器
 app.listen(port, () => {
