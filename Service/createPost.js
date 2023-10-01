@@ -5,13 +5,16 @@ const { Post } = require('../MongoDB/Model/Post')
  */
 
 function createPost(postContent) {
-    const { image, author, location, date, comments, content } = postContent;
+    const { json, imageBuffer } = postContent;
+    const { author, location, date, content } = json;
+    let { comments } = json;
+    comments = comments === '' ? [] : comments;
     const newPost = new Post({
-        image: image,
+        image: imageBuffer,
         author: author,
         location: location,
         date: date,
-        comments: comments || null,
+        comments: comments,
         content: content,
     })
         .save()

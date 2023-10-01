@@ -18,7 +18,6 @@ const postSchema = mongoose.Schema({
     },
     author: {
         type: mongoose.Schema.Types.String,
-        // required: true
     },
     location: {
         type: mongoose.Schema.Types.String,
@@ -30,7 +29,10 @@ const postSchema = mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,
     },
-    comments: [commentSchema],
+    comments: {
+        type: [commentSchema],
+        default: undefined,
+    },
 });
 
 const Post = mongoose.model('Post', postSchema);

@@ -1,6 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
-
+const fs = require('fs')
 const usersTable = require('./MongoDB/Model/Users');
 const userRegiste = require('./Service/userRegiste');
 const createComments = require('./Service/createComment');
@@ -10,6 +10,7 @@ const createImage = require('./Service/createImage');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const path = require('path');
 const app = express();
 const port = 3000;
 const database = 'mongodb://localhost:27017/pinia-database';
@@ -78,21 +79,21 @@ app.post('/create/Comment', async (req, res) => {
 })
 
 
-/**
- * @description 代理创建Post请求
- */
-app.post('/create/Post', async (req, res) => {
-    try {
-        console.log(req.body);
-        res.json({
-            state: 'ok'
-        })
-        res.sendStatus(200);
-    } catch (error) {
-        console.error(error);
-        res.sendStatus(500)
-    }
-})
+// /**
+//  * @description 代理创建Post请求
+//  */
+// app.post('/create/Post', async (req, res) => {
+//     try {
+//         console.log(req.body);
+//         res.json({
+//             state: 'ok'
+//         })
+//         res.sendStatus(200);
+//     } catch (error) {
+//         console.error(error);
+//         res.sendStatus(500)
+//     }
+// })
 
 /**
  * @description 代理创建图片请求，
@@ -114,6 +115,21 @@ app.post('/create/Image', upload.single('image'), async (req, res) => {
         res.send();
         console.error('Fail to store image');
     }
+    res.status(200);
+    res.send();
+})
+
+/**
+ * @description 代理创建Multipart 表单请求
+ */
+app.post('/create/Post', upload.fields([{ name: 'json' }, { name: 'image' }]), async (req, res) => {
+    console.log('Take in two fields');
+    console.log(JSON.parse((req.files.json[0].buffer).toString('utf8')));
+    fs.writeFileSync(path.join(__dirname, '/uploads/', req.files.image[0].originalname), req.files.image[0].buffer);
+    createPost({
+        'json': JSON.parse(req.files.json[0].buffer),
+        'imageBuffer': req.files.image[0].buffer,
+    })
     res.status(200);
     res.send();
 })
