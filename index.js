@@ -11,6 +11,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
+const { createUser } = require('./Service/createUser');
 const app = express();
 const port = 3000;
 const database = 'mongodb://localhost:27017/pinia-database';
@@ -132,6 +133,29 @@ app.post('/create/Post', upload.fields([{ name: 'json' }, { name: 'image' }]), a
     })
     res.status(200);
     res.send();
+})
+
+
+/**
+ * @description 代理创建User的请求,同时返回用户的jwtToken
+ */
+app.post('/create/User', upload.single('json'), async (req, res) => {
+    try {
+        const jwtToken = createUser(JSON.parse(req.file.buffer.toString('utf-8')));
+        res.status(200);
+        res.json({
+            success: true,
+            token: jwtToken,
+        });
+        console.log('Create new User')
+        res.end();
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            token: null,
+        })
+    }
 })
 
 //启动服务器
