@@ -1,25 +1,30 @@
 const { User } = require('../MongoDB/Model/Users');
 const { createJWT } = require('../Service/signJWT');
-
+const bcrypt = require('bcrypt');
+const saltRound = 10;
 /**
  * 
  * @param {*} body 
- * @returns token
+ * @returns {String} token
  */
-function createUser(body) {
-    const { userName, email, password } = body;
-    console.log(body)
-    const newUser = new User({
-        userName: userName,
-        email: email,
-        password: password,
-        // avatar,
-        createDate: Date.now(),
-    });
+async function createUser(body) {
+    const { userName, email } = body;
+    let { password } = body;
+    console.log(body);
     try {
-        newUser.save();
+        const hashedPassword = await bcrypt.hash(password, saltRound);
+        password = hashedPassword;
+        const newUser = new User({
+            userName: userName,
+            email: email,
+            password: password,
+            // avatar,
+            createDate: Date.now(),
+        });
+        await newUser.save();
         return createJWT({ userID: newUser._id });
-    } catch (error) {
+    }
+    catch (error) {
         throw (error);
     }
 }

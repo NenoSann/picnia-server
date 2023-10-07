@@ -12,6 +12,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
 const { createUser } = require('./Service/createUser');
+const { error } = require('console');
 const app = express();
 const port = 3000;
 const database = 'mongodb://localhost:27017/pinia-database';
@@ -80,22 +81,6 @@ app.post('/create/Comment', async (req, res) => {
 })
 
 
-// /**
-//  * @description 代理创建Post请求
-//  */
-// app.post('/create/Post', async (req, res) => {
-//     try {
-//         console.log(req.body);
-//         res.json({
-//             state: 'ok'
-//         })
-//         res.sendStatus(200);
-//     } catch (error) {
-//         console.error(error);
-//         res.sendStatus(500)
-//     }
-// })
-
 /**
  * @description 代理创建图片请求，
  */
@@ -139,21 +124,28 @@ app.post('/create/Post', upload.fields([{ name: 'json' }, { name: 'image' }]), a
 /**
  * @description 代理创建User的请求,同时返回用户的jwtToken
  */
-app.post('/create/User', upload.single('json'), async (req, res) => {
+app.post('/create/User', async (req, res) => {
+    const { emailValidate } = require('./Service/Validation/emailValidation');
+    const { duplicateUserName } = require('./Service/Validation/usernameValidation');
     try {
-        const jwtToken = createUser(JSON.parse(req.file.buffer.toString('utf-8')));
-        res.status(200);
+        //进行信息校验
+        emailValidate(req.body.email);
+        duplicateUserName(req.body.userName);
+        const jwtToken = await createUser(req.body);
         res.json({
-            success: true,
+            status: 'success',
+            message: 'create success',
             token: jwtToken,
         });
+        res.status(201);
         console.log('Create new User')
         res.end();
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            success: false,
+        res.status(400).json({
+            status: 'failed',
             token: null,
+            message: error.message,
         })
     }
 })
