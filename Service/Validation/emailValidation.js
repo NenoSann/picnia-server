@@ -9,6 +9,7 @@ function emailValidate(email) {
     if (!Validator.isEmail(email + '')) {
         throw new Error('invalid email');
     }
+    return true;
 }
 
 module.exports = { emailValidate }

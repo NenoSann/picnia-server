@@ -136,6 +136,10 @@ app.post('/create/User', async (req, res) => {
             status: 'success',
             message: 'create success',
             token: jwtToken,
+            user: {
+                userName: req.body.username,
+                email: req.body.email,
+            }
         });
         res.status(201);
         console.log('Create new User')
@@ -147,6 +151,21 @@ app.post('/create/User', async (req, res) => {
             token: null,
             message: error.message,
         })
+    }
+})
+
+/**
+ * @NenoSann
+ * @description 处理登录函数，登陆成功返回jwtToken，登陆失败返回失败信息
+ */
+app.post('/login', async (req, res) => {
+    const { userLogin } = require('./Service/userLogin');
+    try {
+        userLogin(req.body, res);
+    } catch {
+        console.log('login error');
+        res.status(500);
+        res.end();
     }
 })
 
