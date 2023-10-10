@@ -25,6 +25,10 @@ const User = mongoose.model('User', {
         type: [postSchema],
         default: undefined,
     },
+    userBrief: {
+        type: mongoose.Schema.Types.String,
+        default: undefined,
+    },
     createDate: mongoose.Schema.Types.Date,
 });
 

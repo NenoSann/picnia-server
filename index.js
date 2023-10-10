@@ -169,6 +169,17 @@ app.post('/login', async (req, res) => {
     }
 })
 
+/**
+ * @NenoSann
+ * @description 处理修改用户头像的功能
+ */
+app.post('/edit/avatar', upload.fields([{ name: 'json' }, { name: 'avatar' }]), async (req, res) => {
+    const { changeUserAvatar } = require('./Service/changeUserAvatar');
+    await changeUserAvatar(JSON.parse((req.files.json[0].buffer).toString('utf8')),
+        req.files.avatar[0].buffer,
+        res);
+});
+
 //启动服务器
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

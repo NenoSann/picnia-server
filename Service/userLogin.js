@@ -16,7 +16,6 @@ const saltRround = 10;
 async function userLogin(credentials, res) {
     const { email, password } = credentials;
     if (emailValidate(email)) {
-        //如何查找email为参数email的User项目
         try {
             const user = await User.findOne({ email: email })
             if (user) {
@@ -24,9 +23,15 @@ async function userLogin(credentials, res) {
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
                     const token = createJWT({ userID: user._id });
+                    const avatarBase64 = user.avatar.toString('base64');
                     res.send({
                         status: 'success',
                         message: 'correct',
+                        user: {
+                            userName: user.userName,
+                            email: user.email,
+                            avatar: `data:image/jpeg;base64,${avatarBase64}`
+                        },
                         token: token,
                     });
                     res.status(200);
@@ -35,7 +40,7 @@ async function userLogin(credentials, res) {
                     //用户存在但是密码不匹配
                     res.send({
                         status: 'fail',
-                        message: 'wrong password'
+                        message: 'wrong password',
                     })
                     res.status(401);
                     res.end();
