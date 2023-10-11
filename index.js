@@ -3,15 +3,15 @@ const mongoose = require('mongoose')
 const fs = require('fs')
 const usersTable = require('./MongoDB/Model/Users');
 const userRegiste = require('./Service/userRegiste');
-const createComments = require('./Service/createComment');
-const createPost = require('./Service/createPost');
-const createImage = require('./Service/createImage');
+const createComments = require('./Service/Create/createComment');
+const createPost = require('./Service/Create/createPost');
+const createImage = require('./Service/Create/createImage');
 // 创建中间件
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
-const { createUser } = require('./Service/createUser');
+const { createUser } = require('./Service/Create/createUser');
 const { error } = require('console');
 const app = express();
 const port = 3000;
@@ -173,12 +173,14 @@ app.post('/login', async (req, res) => {
  * @NenoSann
  * @description 处理修改用户头像的功能
  */
-app.post('/edit/avatar', upload.fields([{ name: 'json' }, { name: 'avatar' }]), async (req, res) => {
+app.post('/edit/avatar', upload.fields([{ name: 'json' }, { name: 'image' }]), async (req, res) => {
+    console.log('set user avatar')
     const { changeUserAvatar } = require('./Service/changeUserAvatar');
-    await changeUserAvatar(JSON.parse((req.files.json[0].buffer).toString('utf8')),
-        req.files.avatar[0].buffer,
+    await changeUserAvatar(JSON.parse(req.files.json[0].buffer.toString('utf-8')),
+        req.files.image[0].buffer,
         res);
 });
+
 
 //启动服务器
 app.listen(port, () => {

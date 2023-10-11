@@ -1,5 +1,5 @@
-const { User } = require('../MongoDB/Model/Users');
-const { createJWT } = require('../Service/signJWT');
+const { User } = require('../../MongoDB/Model/Users');
+const { createJWT } = require('../signJWT');
 const bcrypt = require('bcrypt');
 const saltRound = 10;
 /**

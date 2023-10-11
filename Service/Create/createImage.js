@@ -1,4 +1,4 @@
-const { Image } = require('../MongoDB/Model/Image')
+const { Image } = require('../../MongoDB/Model/Image')
 
 /**
  * @NenoSann

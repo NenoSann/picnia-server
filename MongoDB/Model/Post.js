@@ -33,6 +33,18 @@ const postSchema = mongoose.Schema({
         type: [commentSchema],
         default: undefined,
     },
+    likes: {
+        type: mongoose.Schema.Types.Number,
+        default: 0,
+    },
+    saves: {
+        type: mongoose.Schema.Types.Number,
+        default: 0,
+    },
+    commentsCount: {
+        type: mongoose.Schema.Types.Number,
+        default: 0
+    }
 });
 
 const Post = mongoose.model('Post', postSchema);
