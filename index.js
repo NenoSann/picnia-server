@@ -182,6 +182,11 @@ app.post('/edit/avatar', upload.fields([{ name: 'json' }, { name: 'image' }]), a
 });
 
 
+app.get('/get/post', async (req, res) => {
+    const { randomQuery } = require('./Service/Query/QueryPost');
+    randomQuery(10, res);
+})
+
 //启动服务器
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

@@ -9,6 +9,9 @@ const { commentSchema } = require('./Comments');
  *           location:
  *           date:
  *           comments:[],
+ *           likes: 
+ *           saves:
+ *           commentsCount:
  *          }
  * @type {mongoose.Schema}
  */
@@ -17,7 +20,9 @@ const postSchema = mongoose.Schema({
         type: mongoose.Schema.Types.Buffer,
     },
     author: {
-        type: mongoose.Schema.Types.String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: 'unknow'
     },
     location: {
         type: mongoose.Schema.Types.String,

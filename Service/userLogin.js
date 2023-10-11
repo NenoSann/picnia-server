@@ -23,14 +23,16 @@ async function userLogin(credentials, res) {
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
                     const token = createJWT({ userID: user._id });
-                    const avatarBase64 = user.avatar.toString('base64');
+                    if (user.avatar !== undefined) {
+                        const avatarBase64 = user.avatar.toString('base64');
+                    }
                     res.send({
                         status: 'success',
                         message: 'correct',
                         user: {
                             userName: user.userName,
                             email: user.email,
-                            avatar: `data:image/jpeg;base64,${avatarBase64}`
+                            avatar: user.avatar !== undefined ? `data:image/jpeg;base64,${avatarBase64}` : null
                         },
                         token: token,
                     });
