@@ -29,6 +29,14 @@ const User = mongoose.model('User', {
         type: mongoose.Schema.Types.String,
         default: undefined,
     },
+    likeList: {
+        type: [mongoose.Schema.Types.ObjectId],
+        default: undefined,
+    },
+    saveList: {
+        type: [mongoose.Schema.Types.ObjectId],
+        default: undefined,
+    },
     createDate: mongoose.Schema.Types.Date,
 });
 

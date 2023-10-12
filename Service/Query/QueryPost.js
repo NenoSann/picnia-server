@@ -28,8 +28,9 @@ async function randomQuery(count, res) {
                         saves: e.saves,
                         commentCounts: e.comments.length,
                         commenents: e.comments,
-                        postImage: `data:image/jpeg;base64,${e.image.toString('base64')}`
-                    })
+                        postImage: `data:image/jpeg;base64,${e.image.toString('base64')}`,
+                        postID: e._id
+                    });
                 })
             };
             res.json({

@@ -20,11 +20,12 @@ async function userLogin(credentials, res) {
             const user = await User.findOne({ email: email })
             if (user) {
                 //如果user存在
+                let avatarBase64;
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
                     const token = createJWT({ userID: user._id });
                     if (user.avatar !== undefined) {
-                        const avatarBase64 = user.avatar.toString('base64');
+                        avatarBase64 = user.avatar.toString('base64');
                     }
                     res.send({
                         status: 'success',
