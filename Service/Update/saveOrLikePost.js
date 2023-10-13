@@ -15,7 +15,6 @@ async function saveOrLikePost(target, userName, postId, res) {
     try {
         const targetUser = await User.findOne({ userName: userName });
         const targetPost = await Post.findbyId(postId);
-
         if (target === 'like') {
 
         }
