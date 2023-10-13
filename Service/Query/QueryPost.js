@@ -8,9 +8,10 @@ const { User } = require('../../MongoDB/Model/Users');
  * @param {import('express').Response} res 
  * @returns {Promise}
  */
-async function randomQuery(count, res) {
+async function randomQuery(count, requestUserName, res) {
     const postArray = [];
     try {
+        const requestUser = await User.findOne({ userName: requestUserName });
         const result = await Post.aggregate([{ $sample: { size: count } }]);
         if (result.length > 0) {
             for (const e of result) {
@@ -29,7 +30,9 @@ async function randomQuery(count, res) {
                         commentCounts: e.comments.length,
                         commenents: e.comments,
                         postImage: `data:image/jpeg;base64,${e.image.toString('base64')}`,
-                        postID: e._id
+                        postID: e._id,
+                        isLiked: requestUser.likeList.includes(e._id),
+                        isSaved: requestUser.saveList.includes(e._id)
                     });
                 })
             };

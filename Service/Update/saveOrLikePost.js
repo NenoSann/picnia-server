@@ -13,11 +13,11 @@ const { User } = require('../../MongoDB/Model/Users.js');
  */
 async function saveOrLikePost(target, userName, postId, res) {
     try {
+        console.log(userName);
         const targetUser = await User.findOne({ userName: userName });
         const targetPost = await Post.findOne({ _id: postId });
         let targetList;
         let targetCount;
-
         if (target === 'like') {
             targetList = targetUser.likeList;
             targetCount = targetPost.likes;
@@ -26,14 +26,20 @@ async function saveOrLikePost(target, userName, postId, res) {
             targetCount = targetPost.saves;
         }
 
-        const targetIndex = targetList.findIndexOf(postId);
+        const targetIndex = targetList.indexOf(postId);
         // if post is not exist
         if (targetIndex === -1) {
             targetList.push(postId);
             targetCount++;
         } else {
-            targetList.spice(targetIndex, 1);
+            targetList.splice(targetIndex, 1);
             targetCount--;
+        }
+
+        if (target === 'like') {
+            targetPost.likes = targetCount;
+        } else if (target === 'save') {
+            targetPost.saves = targetCount;
         }
         await targetUser.save();
         await targetPost.save();
@@ -43,6 +49,7 @@ async function saveOrLikePost(target, userName, postId, res) {
             message: `successfully toggle ${target}`
         }).end();
     } catch (error) {
+        console.log('saveOrLikePost fail, ', error)
         res.send({
             status: 'fail',
             message: `fail to toggle ${target}`

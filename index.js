@@ -109,15 +109,10 @@ app.post('/create/Image', upload.single('image'), async (req, res) => {
  * @description 代理创建Multipart 表单请求
  */
 app.post('/create/Post', upload.fields([{ name: 'json' }, { name: 'image' }]), async (req, res) => {
-    console.log('Take in two fields');
-    console.log(JSON.parse((req.files.json[0].buffer).toString('utf8')));
-    fs.writeFileSync(path.join(__dirname, '/uploads/', req.files.image[0].originalname), req.files.image[0].buffer);
     createPost({
         'json': JSON.parse(req.files.json[0].buffer),
         'imageBuffer': req.files.image[0].buffer,
-    })
-    res.status(200);
-    res.send();
+    }, res);
 })
 
 
@@ -181,10 +176,21 @@ app.post('/edit/avatar', upload.fields([{ name: 'json' }, { name: 'image' }]), a
         res);
 });
 
-
-app.get('/get/post', async (req, res) => {
+/**
+ * @NenoSann
+ * @description 随机返回10个post
+ */
+app.post('/get/post', async (req, res) => {
     const { randomQuery } = require('./Service/Query/QueryPost');
-    randomQuery(10, res);
+    const { requestUserName } = req.body;
+    randomQuery(10, requestUserName, res);
+})
+
+app.post('/update/saveOrLikePost', async (req, res) => {
+    const { saveOrLikePost } = require('./Service/Update/saveOrLikePost');
+    console.log(req.body)
+    const { target, userName, postId } = req.body;
+    saveOrLikePost(target, userName, postId, res);
 })
 
 //启动服务器

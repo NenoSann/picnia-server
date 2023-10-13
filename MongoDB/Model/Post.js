@@ -22,7 +22,7 @@ const postSchema = mongoose.Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        default: 'unknow'
+        default: undefined,
     },
     location: {
         type: mongoose.Schema.Types.String,
