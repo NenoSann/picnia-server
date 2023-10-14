@@ -3,6 +3,10 @@ const mongoose = require('mongoose')
 
 // Define Comment schema
 const commentSchema = mongoose.Schema({
+    post: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

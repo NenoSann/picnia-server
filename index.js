@@ -186,11 +186,20 @@ app.post('/get/post', async (req, res) => {
     randomQuery(10, requestUserName, res);
 })
 
+/**
+ * @NenoSann
+ * @description 处理post的点赞和收藏功能
+ */
 app.post('/update/saveOrLikePost', async (req, res) => {
     const { saveOrLikePost } = require('./Service/Update/saveOrLikePost');
     console.log(req.body)
     const { target, userName, postId } = req.body;
     saveOrLikePost(target, userName, postId, res);
+})
+
+app.post('/create/post', async (req, res) => {
+    const { createComments } = require('./Service/Create/createComment');
+    createComments(req.body, res);
 })
 
 //启动服务器
