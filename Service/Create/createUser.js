@@ -20,6 +20,8 @@ async function createUser(body) {
             password: password,
             // avatar,
             createDate: Date.now(),
+            likeList: [],
+            saveList: []
         });
         await newUser.save();
         return createJWT({ userID: newUser._id });

@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const fs = require('fs')
 const usersTable = require('./MongoDB/Model/Users');
 const userRegiste = require('./Service/userRegiste');
-const createComments = require('./Service/Create/createComment');
 const createPost = require('./Service/Create/createPost');
 const createImage = require('./Service/Create/createImage');
 // 创建中间件
@@ -70,13 +69,12 @@ app.post('/', async (req, res) => {
  * @description 代理创建Comment的请求
  */
 app.post('/create/Comment', async (req, res) => {
+    const { createComments } = require('./Service/Create/createComment');
     try {
         console.log('Get create comment: ', req.body);
-        createComments(req.body);
-        res.sendStatus(200);
+        createComments(req.body, res);
     } catch (error) {
         console.error(error);
-        res.sendStatus(500);
     }
 })
 
@@ -201,6 +199,8 @@ app.post('/create/post', async (req, res) => {
     const { createComments } = require('./Service/Create/createComment');
     createComments(req.body, res);
 })
+
+
 
 //启动服务器
 app.listen(port, () => {
