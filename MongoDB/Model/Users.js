@@ -22,7 +22,7 @@ const User = mongoose.model('User', {
         default: undefined,
     },
     posts: {
-        type: [postSchema],
+        type: [mongoose.Schema.Types.ObjectId],
         default: undefined,
     },
     userBrief: {

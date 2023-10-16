@@ -20,7 +20,9 @@ async function createPost(postContent, res) {
             date,
             content,
             comments,
-        }).save().then((savedPost) => {
+        }).save().then(async (savedPost) => {
+            foundUser.posts.push(savedPost._id);
+            await foundUser.save();
             console.log('newPost id: ', savedPost._id)
             res.json({ status: 'success', message: 'create post success', newPostId: savedPost._id });
             res.send();

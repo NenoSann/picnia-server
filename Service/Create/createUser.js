@@ -21,7 +21,8 @@ async function createUser(body) {
             // avatar,
             createDate: Date.now(),
             likeList: [],
-            saveList: []
+            saveList: [],
+            posts: [],
         });
         await newUser.save();
         return createJWT({ userID: newUser._id });

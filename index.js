@@ -184,6 +184,12 @@ app.post('/get/post', async (req, res) => {
     randomQuery(10, requestUserName, res);
 })
 
+app.post('/get/post/user', async (req, res) => {
+    const { UserPostQuery } = require('./Service/Query/QueryPost')
+    const { type, userId } = req.body;
+    UserPostQuery(type, userId, res)
+})
+
 /**
  * @NenoSann
  * @description 返回目标post的所有comments 
