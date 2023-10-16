@@ -73,7 +73,7 @@ async function UserPostQuery(type, requestUserId, res) {
     try {
         let targetList;
         const postArray = [];
-        const targetUser = await User.findOne({ _id: requestUserId }).lean();
+        const targetUser = await User.findOne({ _id: requestUserId });
         if (type === 'like') {
             targetList = targetUser.likeList;
         } else if (type === 'own') {
@@ -110,8 +110,8 @@ async function UserPostQuery(type, requestUserId, res) {
                     postImage: `data:image/jpeg;base64,${post.image.toString('base64')}`,
                     postID: post._id,
                     // WRONG CODE HERE
-                    isLiked: targetUser.likeList.includes(postId.valueOf()),
-                    isSaved: targetUser.saveList.includes(postId.valueOf())
+                    isLiked: targetUser.likeList.includes(postId),
+                    isSaved: targetUser.saveList.includes(postId)
                 });
                 console.log('likeList:', targetUser.likeList);
                 console.log('saveList: ', targetUser.saveList);
