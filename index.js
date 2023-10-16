@@ -68,7 +68,7 @@ app.post('/', async (req, res) => {
 /**
  * @description 代理创建Comment的请求
  */
-app.post('/create/Comment', async (req, res) => {
+app.post('/create/comment', async (req, res) => {
     const { createComments } = require('./Service/Create/createComment');
     try {
         console.log('Get create comment: ', req.body);
@@ -186,6 +186,21 @@ app.post('/get/post', async (req, res) => {
 
 /**
  * @NenoSann
+ * @description 返回目标post的所有comments 
+ */
+app.post('/get/comment', async (req, res) => {
+    try {
+        console.log(req.body)
+        const { QueryComments } = require('./Service/Query/QueryComments');
+        const postId = req.body.postId;
+        QueryComments(postId, res);
+    } catch (error) {
+        console.log('get coments error: ', error);
+    }
+})
+
+/**
+ * @NenoSann
  * @description 处理post的点赞和收藏功能
  */
 app.post('/update/saveOrLikePost', async (req, res) => {
@@ -194,12 +209,6 @@ app.post('/update/saveOrLikePost', async (req, res) => {
     const { target, userName, postId } = req.body;
     saveOrLikePost(target, userName, postId, res);
 })
-
-app.post('/create/post', async (req, res) => {
-    const { createComments } = require('./Service/Create/createComment');
-    createComments(req.body, res);
-})
-
 
 
 //启动服务器

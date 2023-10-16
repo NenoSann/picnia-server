@@ -20,7 +20,8 @@ async function randomQuery(count, requestUserName, res) {
                         uploader: {
                             userName: foundUser.userName,
                             email: foundUser.email,
-                            avatar: `data:image/jpeg;base64,${foundUser.avatar.toString('base64')}`
+                            avatar: `data:image/jpeg;base64,${foundUser.avatar.toString('base64')}`,
+                            userId: foundUser._id,
                         },
                         location: e.location,
                         postTime: e.date,

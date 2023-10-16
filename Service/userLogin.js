@@ -33,7 +33,8 @@ async function userLogin(credentials, res) {
                         user: {
                             userName: user.userName,
                             email: user.email,
-                            avatar: user.avatar !== undefined ? `data:image/jpeg;base64,${avatarBase64}` : null
+                            avatar: user.avatar !== undefined ? `data:image/jpeg;base64,${avatarBase64}` : null,
+                            userId: user._id,
                         },
                         token: token,
                     });

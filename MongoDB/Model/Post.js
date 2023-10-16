@@ -35,7 +35,7 @@ const postSchema = mongoose.Schema({
         required: true,
     },
     comments: {
-        type: [commentSchema],
+        type: [mongoose.Schema.Types.ObjectId],
         default: undefined,
     },
     likes: {
