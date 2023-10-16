@@ -60,5 +60,4 @@ async function randomQuery(count, requestUserName, res) {
     }
 
 }
-
 module.exports = { randomQuery }
