@@ -174,6 +174,12 @@ app.post('/edit/avatar', upload.fields([{ name: 'json' }, { name: 'image' }]), a
         res);
 });
 
+app.post('/edit/user', async (req, res) => {
+    console.log('chang user password.');
+    const { changePassword } = require('./Service/userEdit');
+    await changePassword(req.body, res);
+})
+
 /**
  * @NenoSann
  * @description 随机返回10个post
