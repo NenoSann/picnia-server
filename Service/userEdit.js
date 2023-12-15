@@ -14,7 +14,7 @@ async function changePassword(requestBody, res) {
         const targetUser = await User.findOne({ _id: userId });
         if (targetUser !== null) {
             if (await passwordValidation(prePassword, targetUser.password)) {
-                const newHashedPassword = await bcrypt.hash(newPassword, saltRound);
+                const newHashedPassword = await bcrypt(newPassword, saltRound);
                 targetUser.password = newHashedPassword;
                 await targetUser.save();
             } else {
@@ -22,26 +22,23 @@ async function changePassword(requestBody, res) {
                     status: 'fail',
                     message: 'fail to change password: password validate fail.'
                 })
-                return;
             }
         } else {
             res.send({
                 status: 'fail',
                 message: 'fail to change password: user not found.'
-            });
-            return;
+            })
         }
         res.send({
             status: 'success',
             message: 'change user password success.'
         })
     } catch (error) {
-        console.log(error);
-        res.status(500);
         res.send({
             status: 'fail',
             message: 'internal server error.'
         })
+        res.status(500).end();
     }
 }
 
