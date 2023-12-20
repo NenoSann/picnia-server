@@ -1,6 +1,5 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const fs = require('fs')
 const usersTable = require('./MongoDB/Model/Users');
 const userRegiste = require('./Service/userRegiste');
 const createPost = require('./Service/Create/createPost');
@@ -9,12 +8,11 @@ const createImage = require('./Service/Create/createImage');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const path = require('path');
 const { createUser } = require('./Service/Create/createUser');
-const { error } = require('console');
+const { env } = require('process');
 const app = express();
 const port = 3000;
-const database = 'mongodb://NenoSan:2440060505Jkl.@43.163.234.220:27017/pinia-database';
+const MONGODB_URL = env.MONGODB_URL;
 
 //中间件实例
 const storage = multer.memoryStorage({
@@ -31,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //连接mongoose
-mongoose.connect(database, {
+mongoose.connect(MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
@@ -174,12 +172,6 @@ app.post('/edit/avatar', upload.fields([{ name: 'json' }, { name: 'image' }]), a
         res);
 });
 
-app.post('/edit/user', async (req, res) => {
-    console.log('chang user password.');
-    const { changePassword } = require('./Service/userEdit');
-    await changePassword(req.body, res);
-})
-
 /**
  * @NenoSann
  * @description 随机返回10个post
@@ -222,6 +214,9 @@ app.post('/update/saveOrLikePost', async (req, res) => {
     saveOrLikePost(target, userName, postId, res);
 })
 
+app.get('/', async (req, res) => {
+    res.status(200).send('You connect to the server');
+})
 
 //启动服务器
 app.listen(port, () => {
