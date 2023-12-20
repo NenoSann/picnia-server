@@ -12,7 +12,7 @@ const { createUser } = require('./Service/Create/createUser');
 const { env } = require('process');
 const app = express();
 const port = 3000;
-const MONGODB_URL = env.MONGODB_URL;
+const MONGODB_URL = 'mongodb://NenoSan:2440060505Jkl.@43.163.234.220:27017/pinia-database';
 
 //中间件实例
 const storage = multer.memoryStorage({
@@ -216,6 +216,12 @@ app.post('/update/saveOrLikePost', async (req, res) => {
 
 app.get('/', async (req, res) => {
     res.status(200).send('You connect to the server');
+})
+
+app.put('/test/cos', async (req, res) => {
+    const { storeImageBucket } = require('./Service/Create/createImage.js');
+    const result = await storeImageBucket(SecretId, SecretKey);
+    res.send(result);
 })
 
 //启动服务器
