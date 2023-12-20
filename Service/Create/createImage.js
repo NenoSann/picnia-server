@@ -1,6 +1,5 @@
 const { Image } = require('../../MongoDB/Model/Image');
-const COS = require('cos-nodejs-sdk-v5');
-const fs = require('fs');
+
 /**
  * @NenoSann
  * @param {{
@@ -25,34 +24,5 @@ function createImage(image) {
 
 }
 
-/**
- * @NenoSann
- * @description store the image into the tencent©️ ObjectStoreService, return a Promise.
- */
-const Bucket = 'imagebucket-1322308688';
-const Region = 'ap-tokyo';
 
-async function storeImageBucket(SecretId, SecretKey) {
-    const cos = new COS({
-        SecretKey,
-        SecretId
-    });
-    cos.putObject({
-        Bucket,
-        Region,
-        Key: '/avatar/miku.jpg',
-        StorageClass: 'STANDARD',
-        Body: fs.createReadStream('uploads/miku.jpg'),
-        onProgress: function (progressData) {
-            console.log(JSON.stringify(progressData));
-        }
-    }, function (err, data) {
-        if (err) {
-            console.error('error at store COS', err);
-        } else {
-            console.log('success store cos', data);
-            return data.Location;
-        }
-    })
-}
-module.exports = { createImage, storeImageBucket };
+module.exports = createImage;
