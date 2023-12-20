@@ -6,6 +6,7 @@ const Validator = require('validator');
  * @returns {Boolean}
  */
 function emailValidate(email) {
+    console.log(`Debug: email:${email}`);
     if (!Validator.isEmail(email + '')) {
         throw new Error('invalid email');
     }

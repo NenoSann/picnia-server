@@ -14,7 +14,7 @@ const { createUser } = require('./Service/Create/createUser');
 const { error } = require('console');
 const app = express();
 const port = 3000;
-const database = 'mongodb://localhost:27017/pinia-database';
+const database = 'mongodb://NenoSan:2440060505Jkl.@43.163.234.220:27017/pinia-database';
 
 //中间件实例
 const storage = multer.memoryStorage({
@@ -155,8 +155,8 @@ app.post('/login', async (req, res) => {
     const { userLogin } = require('./Service/userLogin');
     try {
         userLogin(req.body, res);
-    } catch {
-        console.log('login error');
+    } catch (e) {
+        console.log('login error', e);
         res.status(500);
         res.end();
     }

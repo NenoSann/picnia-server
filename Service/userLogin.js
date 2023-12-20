@@ -15,8 +15,8 @@ const saltRround = 10;
  */
 async function userLogin(credentials, res) {
     const { email, password } = credentials;
-    if (emailValidate(email)) {
-        try {
+    try {
+        if (emailValidate(email)) {
             const user = await User.findOne({ email: email })
             if (user) {
                 //如果user存在
@@ -58,17 +58,18 @@ async function userLogin(credentials, res) {
                 res.status(401);
                 res.end();
             }
-        } catch (error) {
-            //服务器出现错误，返回错误信息
-            res.send({
-                status: 'fail',
-                message: 'server error'
-            });
-            res.status(500);
-            res.end();
-            console.log(error);
         }
+    } catch (error) {
+        //服务器出现错误，返回错误信息
+        res.send({
+            status: 'fail',
+            message: 'server error'
+        });
+        res.status(500);
+        res.end();
+        console.log(error);
     }
+
 }
 
 module.exports = { userLogin }
