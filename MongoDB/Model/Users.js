@@ -18,8 +18,12 @@ const User = mongoose.model('User', {
     },
     // 使用Buffer作为用户的头像，也许可以替换为id或者其他的非字节类型以提高性能
     avatar: {
-        type: mongoose.Schema.Types.Buffer,
-        default: undefined,
+        type: mongoose.Schema.Types.String,
+        default: 'imagebucket-1322308688.cos.ap-tokyo.myqcloud.com/picnia/avatar/default/default.png',
+    },
+    avatar_v: {
+        type: mongoose.Schema.Types.Number,
+        default: 0,
     },
     posts: {
         type: [mongoose.Schema.Types.ObjectId],

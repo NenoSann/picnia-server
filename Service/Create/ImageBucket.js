@@ -39,8 +39,29 @@ async function storeImageBucket(data, key) {
  *              will return the new uri if success.
  * @param {ReadableStream} avatarData
  * @param {String} userId 
+ * @param {Number} version
+ * @param {String} imgType
+ * @returns {Promise} promise that resolve cos response or err 
  */
-async function storeAvatar(avatarData, userId) {
-
+async function storeAvatar(avatarData, userId, version, imgType) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            cos.putObject({
+                Bucket,
+                Region,
+                // like: /picnia/27942178jf1da/2.jpg
+                Key: `${baseKey}/${userId}/${version}.${imgType}`,
+                StorageClass: "STANDARD",
+                Body: avatarData
+            }).then((response) => {
+                resolve(response);
+            }).catch((err) => {
+                throw err;
+            })
+        } catch (err) {
+            console.error('cos fail at storing avatar!');
+            reject(err);
+        }
+    })
 }
-module.exports = { storeImageBucket };
+module.exports = { storeImageBucket, storeAvatar };
