@@ -17,14 +17,19 @@ async function createPost(postContent, res) {
         const user = await User.findOne({ userName: author });
         if (user !== null) {
             const newPost = new Post({
-                author: foundUser._id,
+                author: user._id,
                 location,
                 date,
                 content,
                 comments,
             });
             // use post id as image's key
-            const cosResponse = await storeImageBucket(imageBuffer, `/image/${newPost._id}`);
+            let cosResponse = 'ERROR';
+            try {
+                cosResponse = await storeImageBucket(imageBuffer, `/image/${newPost._id}.jpg`);
+            } catch (e) {
+                console.log(`error: ${e}`);
+            }
             if (cosResponse === 'ERROR') {
                 throw new Error('cos service error.');
             }
@@ -32,10 +37,11 @@ async function createPost(postContent, res) {
             await newPost.save();
             user.posts.push(newPost._id);
             await user.save();
-            res.json({ status: 'success', message: 'create post success', newPostId: savedPost._id });
+            res.json({ status: 'success', message: 'create post success', newPostId: newPost._id });
             res.send();
         }
     } catch (err) {
+        console.error(err);
         res.status(500).send({
             status: 'fail',
             message: 'create post fail',

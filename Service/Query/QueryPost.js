@@ -21,7 +21,7 @@ async function randomQuery(count, requestUserName, res) {
                         uploader: {
                             userName: foundUser.userName,
                             email: foundUser.email,
-                            avatar: `data:image/jpeg;base64,${foundUser.avatar.toString('base64')}`,
+                            avatar: `data:image/jpeg;base64,${foundUser.avatar?.toString('base64')}`,
                             userId: foundUser._id,
                         },
                         location: e.location,
@@ -31,7 +31,7 @@ async function randomQuery(count, requestUserName, res) {
                         saves: e.saves,
                         commentCounts: e.comments.length,
                         commenents: e.comments,
-                        postImage: `data:image/jpeg;base64,${e.image.toString('base64')}`,
+                        postImage: 'https://' + e.image,
                         postID: e._id,
                         isLiked: requestUser.likeList.includes(e._id),
                         isSaved: requestUser.saveList.includes(e._id)

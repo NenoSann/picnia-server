@@ -4,8 +4,8 @@ const baseKey = '/picnia/'
 const Bucket = 'imagebucket-1322308688';
 const Region = 'ap-tokyo';
 const cos = new COS({
-    SecretKey,
-    SecretId
+    SecretKey: '5zznQsk6FCwcT9cv77tQs9HDzfASWWO5',
+    SecretId: 'AKIDNdkdIpCMI1bz9597sRCHEzVluthHsPkw'
 });
 /**
  * @NenoSann
@@ -30,5 +30,17 @@ async function storeImageBucket(data, key) {
             reject('ERROR');
         }
     })
+}
+
+/**
+ * @NenoSann
+ * @description Store user's avatar, can use to replace existing avatar or add initial avatar,
+ *              every user has a folder in cos service that store all previous used avatars.
+ *              will return the new uri if success.
+ * @param {ReadableStream} avatarData
+ * @param {String} userId 
+ */
+async function storeAvatar(avatarData, userId) {
+
 }
 module.exports = { storeImageBucket };
