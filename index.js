@@ -167,7 +167,8 @@ app.post('/login', async (req, res) => {
 app.post('/edit/avatar', upload.fields([{ name: 'json' }, { name: 'image' }]), async (req, res) => {
     console.log('set user avatar')
     const { changeUserAvatar } = require('./Service/changeUserAvatar');
-    await changeUserAvatar(JSON.parse(req.files.json[0].buffer.toString('utf-8')),
+    const { userName, email, imgType } = JSON.parse(req.files.json[0].buffer.toString('utf-8'));
+    await changeUserAvatar({ userName, email }, imgType,
         req.files.image[0].buffer,
         res);
 });
