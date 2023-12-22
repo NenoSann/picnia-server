@@ -22,7 +22,7 @@ async function randomQuery(count, requestUserName, res) {
                             userName: foundUser.userName,
                             email: foundUser.email,
                             avatar: `https://${foundUser.avatar}`,
-                            userId: foundUser._id,
+                            userId: foundUser.id,
                         },
                         location: e.location,
                         postTime: e.date,

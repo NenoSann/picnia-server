@@ -15,7 +15,7 @@ async function QueryComments(postId, res) {
         for (const comment of foundComments) {
             const foundUser = await User.findOne({ _id: comment.sender });
             comment.sender = {
-                avatar: foundUser.avatar ? `data:image/jpeg;base64,${foundUser.avatar.toString('base64')}` : null,
+                avatar: foundUser.avatar ? `https://${foundUser.avatar}` : null,
                 userName: foundUser.userName,
                 userId: foundUser._id
             }
