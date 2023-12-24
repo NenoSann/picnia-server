@@ -1,6 +1,6 @@
-const { User } = require('../MongoDB/Model/Users');
+const { User } = require('../../MongoDB/Model/Users');
 const jwt = require('jsonwebtoken');
-const { storeAvatar } = require('./Create/ImageBucket');
+const { storeAvatar } = require('../Create/ImageBucket');
 /**
  * @NenoSann
  * @description 将传入的avatar添加到user中
