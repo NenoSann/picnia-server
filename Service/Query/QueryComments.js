@@ -1,7 +1,7 @@
 const { Post } = require('../../MongoDB/Model/Post');
 const { User } = require('../../MongoDB/Model/Users');
 const { Comment } = require('../../MongoDB/Model/Comments');
-
+const defaultAvatar = 'https://imagebucket-1322308688.cos.ap-tokyo.myqcloud.com/picnia/avatar/default/default.png';
 /**
  * @description return all comments in target post
  * @param {String} postId 
@@ -15,7 +15,7 @@ async function QueryComments(postId, res) {
         for (const comment of foundComments) {
             const foundUser = await User.findOne({ _id: comment.sender });
             comment.sender = {
-                avatar: foundUser.avatar ? `data:image/jpeg;base64,${foundUser.avatar.toString('base64')}` : null,
+                avatar: foundUser.avatar ? `https://${foundUser.avatar}` : `https://${defaultAvatar}`,
                 userName: foundUser.userName,
                 userId: foundUser._id
             }

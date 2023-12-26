@@ -84,7 +84,7 @@ async function UserPostQuery(type, requestUserId, res) {
         const uploader = {
             userName: targetUser.userName,
             email: targetUser.email,
-            avatar: `data:image/jpeg;base64,${targetUser.avatar.toString('base64')}`,
+            avatar: `https://${targetUser.avatar}`,
             userId: targetUser._id
         }
         if (targetList.length === 0) {
@@ -107,7 +107,7 @@ async function UserPostQuery(type, requestUserId, res) {
                     saves: post.saves,
                     commentCounts: post.comments.length,
                     commenents: post.comments,
-                    postImage: `data:image/jpeg;base64,${post.image.toString('base64')}`,
+                    postImage: `https://${post.image}`,
                     postID: post._id,
                     // WRONG CODE HERE
                     isLiked: targetUser.likeList.includes(postId),
