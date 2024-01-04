@@ -34,8 +34,8 @@ async function storeImageBucket(data, key) {
 
 /**
  * @NenoSann
- * @description Store user's avatar, can use to replace existing avatar or add initial avatar,
- *              every user has a folder in cos service that store all previous used avatars.
+ * @description Store user's avatar, can use to replace existing avatar or add initial avatar,  
+ *              every user has a folder in cos service that store all previous used avatars.  
  *              will return the new uri if success.
  * @param {ReadableStream} avatarData
  * @param {String} userId 
@@ -49,8 +49,8 @@ async function storeAvatar(avatarData, userId, version, imgType) {
             cos.putObject({
                 Bucket,
                 Region,
-                // like: /picnia/27942178jf1da/2.jpg
-                Key: `${baseKey}/${userId}/${version}.${imgType}`,
+                // like: /picnia/avatar/27942178jf1da/2.jpg
+                Key: `${baseKey}/avatar/${userId}/${version}.${imgType}`,
                 StorageClass: "STANDARD",
                 Body: avatarData
             }).then((response) => {

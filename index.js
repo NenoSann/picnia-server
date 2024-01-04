@@ -166,7 +166,7 @@ app.post('/login', async (req, res) => {
  */
 app.post('/edit/avatar', upload.fields([{ name: 'json' }, { name: 'image' }]), async (req, res) => {
     console.log('set user avatar')
-    const { changeUserAvatar } = require('./Service/changeUserAvatar');
+    const { changeUserAvatar } = require('./Service/Update/changeUserAvatar.js');
     const { userName, email, imgType } = JSON.parse(req.files.json[0].buffer.toString('utf-8'));
     await changeUserAvatar({ userName, email }, imgType,
         req.files.image[0].buffer,
@@ -213,6 +213,17 @@ app.post('/update/saveOrLikePost', async (req, res) => {
     console.log(req.body)
     const { target, userName, postId } = req.body;
     saveOrLikePost(target, userName, postId, res);
+})
+
+app.post('/update/changeUsername', async (req, res) => {
+    const { changeUsername } = require('./Service/Update/changeUsername');
+    const { userId, username } = req.body;
+    try {
+        const result = await changeUsername(userId, username);
+        res.status(200).json(result);
+    } catch (e) {
+        res.status(400).json(e);
+    }
 })
 
 app.get('/', async (req, res) => {
