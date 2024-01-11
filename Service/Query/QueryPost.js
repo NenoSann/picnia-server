@@ -2,6 +2,7 @@ const { request } = require('express');
 const { Post } = require('../../MongoDB/Model/Post');
 const { User } = require('../../MongoDB/Model/Users');
 
+const COUNTMAX = 20;
 /**
  * @NenoSann
  * @description 随机返回count数量的post，返回一个Promise表示完成情况
@@ -16,23 +17,10 @@ async function randomQuery(count, requestUserName, res) {
         const result = await Post.aggregate([{ $sample: { size: count } }]);
         if (result.length > 0) {
             for (const e of result) {
-                await User.findById(e.author).then((foundUser) => {
+                await User.findById(e.author).then((uploader) => {
                     postArray.push({
-                        uploader: {
-                            userName: foundUser.userName,
-                            email: foundUser.email,
-                            avatar: `https://${foundUser.avatar}`,
-                            userId: foundUser.id,
-                        },
-                        location: e.location,
-                        postTime: e.date,
-                        postContent: e.content,
-                        likes: e.likes,
-                        saves: e.saves,
-                        commentCounts: e.comments.length,
-                        commenents: e.comments,
-                        postImage: 'https://' + e.image,
-                        postID: e._id,
+                        uploader: getUploaderData(uploader),
+                        ...getPostData(e),
                         isLiked: requestUser.likeList.includes(e._id),
                         isSaved: requestUser.saveList.includes(e._id)
                     });
@@ -81,12 +69,7 @@ async function UserPostQuery(type, requestUserId, res) {
         } else if (type === 'save') {
             targetList = targetUser.saveList;
         }
-        const uploader = {
-            userName: targetUser.userName,
-            email: targetUser.email,
-            avatar: `https://${targetUser.avatar}`,
-            userId: targetUser._id
-        }
+        const uploader = getUploaderData(targetUser);
         if (targetList.length === 0) {
             console.log('No posts found.');
             res.json({
@@ -100,15 +83,7 @@ async function UserPostQuery(type, requestUserId, res) {
                 const post = await Post.findOne({ _id: postId }).lean();
                 postArray.push({
                     uploader,
-                    location: post.location,
-                    postTime: post.date,
-                    postContent: post.content,
-                    likes: post.likes,
-                    saves: post.saves,
-                    commentCounts: post.comments.length,
-                    commenents: post.comments,
-                    postImage: `https://${post.image}`,
-                    postID: post._id,
+                    ...getPostData(post),
                     // WRONG CODE HERE
                     isLiked: targetUser.likeList.includes(postId),
                     isSaved: targetUser.saveList.includes(postId)
@@ -128,6 +103,65 @@ async function UserPostQuery(type, requestUserId, res) {
         // send error to the client when occurded
         res.status(500).json({ error: `'Failed to retrieve ${type} post'` });
         res.end();
+    }
+}
+
+/**
+ * @description randomly return count number post. If remain post is  
+ *              less than count then return all posts.
+ * @param {Number} count 
+ * @return The random post array
+ */
+async function randomQueryPost(count) {
+    if (count <= 0) {
+        throw new Error('count is less than 0');
+    }
+    try {
+        count = count > COUNTMAX ? COUNTMAX : count;
+        const randomPosts = await Post.aggregate({
+            $sample: {
+                size: count
+            }
+        });
+        return randomPosts;
+    } catch {
+        console.error(error);
+        throw new Error('Failed to query random posts');
+    }
+}
+
+
+/**
+ * @description return a uploader's info 
+ * @param {*} uploader 
+ * @returns a object represent post uploader info
+ */
+function getUploaderData(uploader) {
+    return {
+        userName: uploader?.userName,
+        email: uploader?.email,
+        avatar: `https://${uploader?.avatar}`,
+        userId: uploader?.id,
+    }
+}
+
+/**
+ * @description wrapper for get posts's data
+ * @param {*} post 
+ * @return The posts's data for frontend app, like location/postTime/comments
+ * 
+ */
+function getPostData(post) {
+    return {
+        location: post.location,
+        postTime: post.date,
+        postContent: post.content,
+        likes: post.likes,
+        saves: post.saves,
+        commentCounts: post?.comments.length,
+        commenents: post.comments,
+        postImage: 'https://' + post.image,
+        postID: post._id,
     }
 }
 module.exports = { randomQuery, UserPostQuery }

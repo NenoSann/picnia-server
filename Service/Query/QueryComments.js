@@ -7,7 +7,7 @@ const defaultAvatar = 'https://imagebucket-1322308688.cos.ap-tokyo.myqcloud.com/
  * @param {String} postId 
  * @param {import('express').Response} res 
  */
-async function QueryComments(postId, res) {
+async function QueryCommentsById(postId, res) {
     try {
         const foundComments = await Comment.find({ post: postId }).lean();
         console.log(foundComments)
@@ -22,12 +22,14 @@ async function QueryComments(postId, res) {
             updatedComments.push(comment);
         }
         console.log('updated comments: ', updatedComments);
-        res.send(JSON.stringify(updatedComments));
+        res.send(JSON.stringify({
+            postId: postId,
+            item: updatedComments
+        }));
         res.status(200)
     } catch (error) {
         res.status(500);
         console.error('fail on query comments, ', error);
     }
 }
-
-module.exports = { QueryComments }
+module.exports = { QueryCommentsById }

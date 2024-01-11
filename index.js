@@ -196,9 +196,9 @@ app.post('/get/post/user', async (req, res) => {
 app.post('/get/comment', async (req, res) => {
     try {
         console.log(req.body)
-        const { QueryComments } = require('./Service/Query/QueryComments');
+        const { QueryCommentsById } = require('./Service/Query/QueryComments');
         const postId = req.body.postId;
-        QueryComments(postId, res);
+        QueryCommentsById(postId, res);
     } catch (error) {
         console.log('get coments error: ', error);
     }
