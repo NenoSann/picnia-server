@@ -49,6 +49,10 @@ const postSchema = mongoose.Schema({
     commentsCount: {
         type: mongoose.Schema.Types.Number,
         default: 0
+    },
+    isInvalid: {
+        type: mongoose.Schema.Types.Boolean,
+        default: false
     }
 });
 
