@@ -12,4 +12,4 @@ function createJWT(load, expiredDay = 7) {
     return token;
 }
 
-module.exports = { createJWT };
+module.exports = { createJWT, SECRET_KEY };

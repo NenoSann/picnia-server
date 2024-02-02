@@ -5,6 +5,7 @@ const userRegiste = require('./Service/userRegiste');
 const createPost = require('./Service/Create/createPost');
 const createImage = require('./Service/Create/createImage');
 // 创建中间件
+const jwtValidation = require('./Middleware/jwtValidation.js');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -25,7 +26,7 @@ const upload = multer({ storage: storage });
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(jwtValidation);
 
 
 //连接mongoose
