@@ -6,7 +6,7 @@ const { User } = require('../../MongoDB/Model/Users');
  * @returns {Promise}
  */
 async function deletePostById(postId) {
-    return Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         // how to deal with error handling? doing it in here or move  
         // the error handling to express router
         try {

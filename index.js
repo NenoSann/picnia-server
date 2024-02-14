@@ -5,7 +5,7 @@ const userRegiste = require('./Service/userRegiste');
 const createPost = require('./Service/Create/createPost');
 const createImage = require('./Service/Create/createImage');
 // 创建中间件
-const jwtValidation = require('./Middleware/jwtValidation.js');
+const { jwtValidation } = require('./Middleware/jwtValidation.js');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer');
