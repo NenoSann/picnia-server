@@ -10,11 +10,13 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const { createUser } = require('./Service/Create/createUser');
-const { env } = require('process');
+const process = require('process');
 const app = express();
 const port = 3000;
-const MONGODB_URL = 'mongodb://NenoSan:2440060505Jkl.@43.163.234.220:27017/pinia-database-test';
-
+if (!process.env['MONGODB']) {
+    throw new Error('Mongodb env variable not existed');
+}
+const MONGODB_URL = process.env['MONGODB'];
 //中间件实例
 const storage = multer.memoryStorage({
 })
@@ -192,7 +194,7 @@ app.post('/get/post/user', async (req, res) => {
 
 /**
  * @NenoSann
- * @description 返回目标post的所有comments 
+ * @description 返回目标post的所有comments
  */
 app.post('/get/comment', async (req, res) => {
     try {
@@ -241,3 +243,4 @@ app.put('/test/cos', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
