@@ -233,6 +233,19 @@ app.get('/', async (req, res) => {
     res.status(200).send('You connect to the server');
 })
 
+app.get('/test/profile/:userName', async (req, res) => {
+    const { QueryUserProfileByUsername } = require('./Service/Query/QueryUser');
+    console.log('router params: \n', req.params);
+    const userResult = await QueryUserProfileByUsername(req.params['userName']);
+    res.json(userResult);
+})
+
+app.get('/profile/:userName', async (req, res) => {
+    const { QueryUserProfileByUsername } = require('./Service/Query/QueryUser');
+    const userResult = await QueryUserProfileByUsername(req.params['userName']);
+    res.json(userResult);
+})
+
 app.put('/test/cos', async (req, res) => {
     const { storeImageBucket } = require('./Service/Create/createImage.js');
     const result = await storeImageBucket(SecretId, SecretKey);

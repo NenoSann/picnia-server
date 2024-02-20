@@ -52,6 +52,45 @@ async function randomQuery(count, requestUserName, res) {
 
 /**
  * @NenoSann
+ * @description 
+ * @param {'like' | 'save' | 'own'} type 
+ * @param {string} requestUserId 
+ * @returns {Promise}
+ * 
+ */
+export async function QueryUserPosts(type, requestUserId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let targetList;
+            const postsArray = [];
+            const targetUser = await User.findById(requestUserId);
+            if (!targetUser) {
+                throw new Error('targetUser not existed');
+            }
+            targetList = getUserPostList(type, targetUser);
+
+            const uploaderData = getUploaderData(targetUser);
+            if (targetList.length === 0) {
+                resolve(postsArray);
+            }
+            for (const postId of targetList) {
+                const post = await Post.findById(postId).lean();
+                postsArray.push({
+                    uploaderData,
+                    ...getPostData(post),
+                    isLiked: targetUser.likeList.includes(postId),
+                    isSaved: targetUser.saveList.includes(postId)
+                })
+            }
+            resolve(postsArray);
+        } catch (err) {
+            reject(err);
+        }
+    })
+}
+
+/**
+ * @NenoSann
  * @description return user's post depends on passin type
  * @param {'like'|'save'|'own'} type
  * @param {String} requestUserId 
@@ -62,13 +101,10 @@ async function UserPostQuery(type, requestUserId, res) {
         let targetList;
         const postArray = [];
         const targetUser = await User.findOne({ _id: requestUserId });
-        if (type === 'like') {
-            targetList = targetUser.likeList;
-        } else if (type === 'own') {
-            targetList = targetUser.posts;
-        } else if (type === 'save') {
-            targetList = targetUser.saveList;
+        if (targetUser === null) {
+            throw new Error('targetUser not exist');
         }
+        targetList = getUserPostList(type, targetUser);
         const uploader = getUploaderData(targetUser);
         if (targetList.length === 0) {
             console.log('No posts found.');
@@ -107,29 +143,21 @@ async function UserPostQuery(type, requestUserId, res) {
 }
 
 /**
- * @description randomly return count number post. If remain post is  
- *              less than count then return all posts.
- * @param {Number} count 
- * @return The random post array
+ * @description get mongodb user's posts list base on type
+ * @param {'like'|'save'|'own'} type 
+ * @param {*} targerUser 
  */
-async function randomQueryPost(count) {
-    if (count <= 0) {
-        throw new Error('count is less than 0');
+function getUserPostList(type, targetUser) {
+    let targetList;
+    if (type === 'like') {
+        targetList = targetUser.likeList;
+    } else if (type === 'own') {
+        targetList = targetUser.posts;
+    } else if (type === 'save') {
+        targetList = targetUser.saveList;
     }
-    try {
-        count = count > COUNTMAX ? COUNTMAX : count;
-        const randomPosts = await Post.aggregate({
-            $sample: {
-                size: count
-            }
-        });
-        return randomPosts;
-    } catch {
-        console.error(error);
-        throw new Error('Failed to query random posts');
-    }
+    return targetList;
 }
-
 
 /**
  * @description return a uploader's info 

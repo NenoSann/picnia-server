@@ -7,12 +7,17 @@ const { SECRET_KEY } = require('../Service/signJWT');
  * @param {Function} next 
  */
 function jwtValidation(req, res, next) {
-    if (req.url === '/create/User' || req.url === '/login') {
+    if (req.url === '/create/User' || req.url === '/login' || req.url === '/test/profile') {
         next();
         return;
     }
+    const urls = req.url.split('/');
+    if (urls[1] === 'test') {
+        next();
+        return;
+    }
+    console.log('urls: \n', urls);
     // skip JWT validation for certain url
-    console.log(req.url);
     if (!req.headers.authorization) {
         return res.status(403).json({
             status: 'failed',
