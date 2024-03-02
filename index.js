@@ -187,9 +187,18 @@ app.post('/get/post', async (req, res) => {
 })
 
 app.post('/get/post/user', async (req, res) => {
-    const { UserPostQuery } = require('./Service/Query/QueryPost')
+    const { QueryUserPosts } = require('./Service/Query/QueryPost')
     const { type, userId } = req.body;
-    UserPostQuery(type, userId, res)
+    try {
+        const result = await QueryUserPosts(type, userId);
+        res.json({
+            status: 'success',
+            message: `return ${type} posts`,
+            post: result
+        })
+    } catch {
+        res.status(500).json({ error: `'Failed to retrieve ${type} post'` }).end();
+    }
 })
 
 /**

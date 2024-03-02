@@ -1,5 +1,4 @@
 const COS = require('cos-nodejs-sdk-v5');
-const fs = require('fs');
 const baseKey = '/picnia/'
 const Bucket = 'imagebucket-1322308688';
 const Region = 'ap-tokyo';
@@ -30,6 +29,18 @@ async function storeImageBucket(data, key) {
             reject('ERROR');
         }
     })
+}
+
+/**
+ * @description store multiple images into Tencent©️ ObjectStoreService, return a Promise.all
+ * @param {[*]} datas 
+ * @param {string} key 
+ * @returns {Promise}
+ */
+async function storeMultipleImage(datas, keys) {
+    const promiseArr = [];
+    datas.forEach((data, index) => promiseArr.push(storeImageBucket(data, keys[index])));
+    return Promise.all(promiseArr);
 }
 
 /**
@@ -64,4 +75,4 @@ async function storeAvatar(avatarData, userId, version, imgType) {
         }
     })
 }
-module.exports = { storeImageBucket, storeAvatar };
+module.exports = { storeImageBucket, storeAvatar, storeMultipleImage };

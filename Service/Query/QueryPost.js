@@ -58,7 +58,7 @@ async function randomQuery(count, requestUserName, res) {
  * @returns {Promise}
  * 
  */
-export async function QueryUserPosts(type, requestUserId) {
+async function QueryUserPosts(type, requestUserId) {
     return new Promise(async (resolve, reject) => {
         try {
             let targetList;
@@ -69,14 +69,14 @@ export async function QueryUserPosts(type, requestUserId) {
             }
             targetList = getUserPostList(type, targetUser);
 
-            const uploaderData = getUploaderData(targetUser);
+            const uploader = getUploaderData(targetUser);
             if (targetList.length === 0) {
                 resolve(postsArray);
             }
             for (const postId of targetList) {
                 const post = await Post.findById(postId).lean();
                 postsArray.push({
-                    uploaderData,
+                    uploader,
                     ...getPostData(post),
                     isLiked: targetUser.likeList.includes(postId),
                     isSaved: targetUser.saveList.includes(postId)
@@ -192,4 +192,4 @@ function getPostData(post) {
         postID: post._id,
     }
 }
-module.exports = { randomQuery, UserPostQuery }
+module.exports = { randomQuery, UserPostQuery, QueryUserPosts }
