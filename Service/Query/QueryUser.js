@@ -74,4 +74,26 @@ async function QueryUserIdByUsername(userName) {
         }
     })
 }
-module.exports = { QueryUserProfileById, QueryUserIdByUsername, QueryUserProfileByUsername }
+
+/**
+ * Query a user by its email, return a user model or null, depends on 
+ * query result, reject if error occur.
+ * @param {string} userEmail 
+ * @returns {Promise<User | null>}
+ */
+async function QueryUserByEmail(userEmail) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (userEmail) {
+                const user = await User.findOne({ email: userEmail }).exec();
+                user ? resolve(user) : resolve(null);
+            } else {
+                resolve(null);
+            }
+        } catch (error) {
+            reject(error);
+            console.error(error);
+        }
+    })
+}
+module.exports = { QueryUserProfileById, QueryUserIdByUsername, QueryUserProfileByUsername, QueryUserByEmail }
