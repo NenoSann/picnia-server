@@ -1,10 +1,12 @@
 const COS = require('cos-nodejs-sdk-v5');
+const SecretKey = process.env['SecretKeyPicnia'];
+const SecretId = process.env['SecretIdPicnia'];
 const baseKey = '/picnia/'
-const Bucket = 'imagebucket-1322308688';
+const Bucket = 'picnia-image-1322308688';
 const Region = 'ap-tokyo';
 const cos = new COS({
-    SecretKey: '5zznQsk6FCwcT9cv77tQs9HDzfASWWO5',
-    SecretId: 'AKIDNdkdIpCMI1bz9597sRCHEzVluthHsPkw'
+    SecretKey,
+    SecretId,
 });
 /**
  * @NenoSann

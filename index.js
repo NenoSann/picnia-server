@@ -1,5 +1,13 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const https = require('https');
+const fs = require('fs');
+
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/nenosannn.icu/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/nenosannn.icu/cert.pem')
+}
+
 const usersTable = require('./MongoDB/Model/Users');
 const userRegiste = require('./Service/userRegiste');
 const createPost = require('./Service/Create/createPost');
@@ -13,10 +21,10 @@ const { createUser } = require('./Service/Create/createUser');
 const process = require('process');
 const app = express();
 const port = 3000;
-if (!process.env['MONGODB']) {
+if (!process.env['MONGODB_Picnia']) {
     throw new Error('Mongodb env variable not existed');
 }
-const MONGODB_URL = process.env['MONGODB'];
+const MONGODB_URL = process.env['MONGODB_Picnia'];
 //中间件实例
 const storage = multer.memoryStorage({
 })
@@ -262,7 +270,8 @@ app.put('/test/cos', async (req, res) => {
 })
 
 //启动服务器
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+const server = https.createServer(options, app);
+server.listen(port, () => {
+    console.log(`picnia running at https://nenosannn.icu/picnia`);
+})
 
