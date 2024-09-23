@@ -52,25 +52,25 @@ async function QueryUserProfileByUsername(userName) {
 /**
  * @description Query a user by username in mongodb
  * @param {string} userName 
- * @returns {string} user's mongodb id
+ * @returns {Promise<string | null>} user's mongodb id
  */
 async function QueryUserIdByUsername(userName) {
     return new Promise(async (resolve, reject) => {
         try {
             if (userName) {
                 const user = await User.findOne({ userName: userName }).exec();
-                const userId = user._id;
+                const userId = user?._id;
                 if (userId) {
                     resolve(userId)
                 } else {
-                    throw new Error('user not exist');
+                    resolve(null);
                 }
             } else {
                 throw new Error('userName not provided');
             }
         } catch (error) {
             reject(error);
-            console.error(error);
+            console.log(error);
         }
     })
 }

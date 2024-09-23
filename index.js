@@ -29,7 +29,7 @@ const MONGODB_URL = process.env['MONGODB_Picnia'];
 const storage = multer.memoryStorage({
 })
 const upload = multer({ storage: storage });
-const userRouter = require('./routes/user.js');
+const { userRouter } = require('./routes/user.js');
 
 // multer的实例对象
 //启动全局cors，JSON解析和multer多文件解析
@@ -37,7 +37,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(jwtValidation);
-app.use(userRouter);
+app.use('/query', userRouter);
 
 //连接mongoose
 mongoose.connect(MONGODB_URL, {
